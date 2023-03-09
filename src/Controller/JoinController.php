@@ -61,10 +61,7 @@ class JoinController extends AbstractController
         if (empty($this->getUser())) {
             return $this->redirectToRoute('app_login');
         }
-        $user = $this->getUser();
-        $user->setRoles(['ROLE_ADMIN']);
-        $this->em->persist($user);
-        $this->em->flush();
+
         $isBook = $this->bookRepo->findOneBy([
             "user" => $this->getUser()
         ]);
