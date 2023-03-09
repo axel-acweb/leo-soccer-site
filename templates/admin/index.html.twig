@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<div class="hero overlay" style="background-image: url('images/bg_1.jpg');">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12 ml-auto">
+                <h1 class="text-white">Administration - Léo Club</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        {% for key, group_stage in gsM %}
+            <div class="col-md-6 bg-light border p-2">
+                <h2 class="text-center m-3">Poule {{ range('A','Z')[key] }}</h2>
+                <div class="widget-next-match">
+                <table class="table custom-table">
+                    <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>MJ</th>
+                        <th>G</th>
+                        <th>N</th>
+                        <th>P</th>
+                        <th>+/-</th>
+                        <th>PTS</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for key, team in group_stage.teams %}
+                    <tr>
+                        <td><strong class="text-white">{{team.teamName}}</strong></td>
+                        <td>{{ team.victories + team.draw + team.defeat }}</td>
+                        <td>{{ team.victories }}</td>
+                        <td>{{ team.draw }}</td>
+                        <td>{{ team.defeat }}</td>
+                        <td>{{team.goalFor != null ? team.goalFor : '0'}}/{{team.scoreAgainst != null ? team.scoreAgainst : '0'}}</td>
+                        <td>{{ team.points }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="alert alert-info w-100 mt-4 text-center">Cliquez sur n'importe quel encadré blanc pour ajouter/modifier le score</div>
+        {% for key, group_stage in gsM %}
+            <div class="col-12 mt-4">
+                <h1>Matchs poule {{ range('A','Z')[key] }}</h1>
+            </div>
+            {% for match in group_stage.matchs %}
+                <div class="col-md-6 p-4">
+                    <div class="bg-white row match-display" data-toggle="modal" data-target="#exampleModal{{match.id}}" style="cursor: pointer;">
+                        <span class="col-4 text-center">{{match.team1.teamName}}  {% if match.team1Score is same as(0) %}<strong class="font-weight-bold">(0)</strong>{% endif %}{% if match.team1Score != null %}<strong class="font-weight-bold">({{match.team1Score}})</strong>{% endif %}</span>
+                        <span class="col-4 text-center font-weight-bold">vs</span>
+                        <span class="col-4 text-center">{% if match.team2Score is same as(0) %}<strong class="font-weight-bold">(0)</strong>{% endif %}{% if match.team2Score != null %}<strong class="font-weight-bold">({{match.team2Score}})</strong>{% endif %} {{match.team2.teamName}}</span>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="exampleModal{{match.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">Résultats du match {{match.team1.teamName}} vs {{match.team2.teamName}}
+                                <h5 class="modal-title" id="exampleModalLabel">{Modal title}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form action="{{path('app_admin_score_add', {id: match.id})}}" method="post">
+                                <div class="modal-body">
+                                        <div class="w-100">
+                                            <div class="font-weight-bold">{{match.team1.teamName}}</div>
+                                            <input type="number" value="{{match.team1Score}}" name="team1" class="border text-dark w-100" aria-describedby="emailHelp" placeholder="Nombre de but">
+                                        </div>
+                                        <div class="mt-2 w-100">
+                                            <div class="font-weight-bold">{{match.team2.teamName}}</div>
+                                            <input type="number" value="{{match.team2Score}}" name="team2" class="border text-dark w-100" aria-describedby="emailHelp" placeholder="Nombre de but">
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                    <button type="submit" class="btn btn-info">Enregistrer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+<style>
+    .match-display:hover {
+        background-color: red;
+    }
+</style>
+{% endblock %}
