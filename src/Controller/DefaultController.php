@@ -21,10 +21,15 @@ class DefaultController extends AbstractController
     #[Route('/', name: 'app_default')]
     public function index(): Response
     {
-        $books = $this->bookRepo->findBy(["status" => "valid"]);
+        $books = $this->bookRepo->findBy(["status" => "valid"], ["points" => "DESC"]);
 
         usort($books, function($a, $b)
         {
+            if($b->getPoints() == $a->getPoints()) {
+                $bAverage = $b->getGoalFor() - $b->getScoreAgainst();
+                $aAverage = $a->getGoalFor() - $a->getScoreAgainst();
+                return ($aAverage > $bAverage) ? -1 : +1;
+            }
             return strcmp($b->getPoints(), $a->getPoints());
         });
         return $this->render('index.html.twig', [

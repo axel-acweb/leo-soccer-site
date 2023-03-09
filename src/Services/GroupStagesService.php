@@ -68,6 +68,11 @@ class GroupStagesService {
 
             usort($merge, function($a, $b)
             {
+                if($b->getPoints() == $a->getPoints()) {
+                    $bAverage = $b->getGoalFor() - $b->getScoreAgainst();
+                    $aAverage = $a->getGoalFor() - $a->getScoreAgainst();
+                    return ($aAverage > $bAverage) ? -1 : +1;
+                }
                 return strcmp($b->getPoints(), $a->getPoints());
             });
 
