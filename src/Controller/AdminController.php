@@ -63,9 +63,7 @@ class AdminController extends AbstractController
         $gStages = $this->gsRepo->findAll();
         $gStagesMatch = $this->gsmRepo->findAll();
         $teams = $this->bookRepo->findBy(["status" => "valid"]);
-        $gsValid = false;
         if(empty($gStagesMatch) && count($teams) == 12) {
-            $gsValid = true;
             $group_stages = $gsService->generateGroupeStages($teams, $gStages);
             foreach($group_stages as $key => $gs) {
                 $gsEntity = $gStages[$key - 1];
@@ -79,6 +77,9 @@ class AdminController extends AbstractController
             }
         }
         $this->em->flush();
+
+        $gsValid = !empty($gStagesMatch);
+
 
         $groupStagesMatch = $gsService->getAllGroupeStagesMatch($this->em);
 

@@ -22,6 +22,11 @@ class DefaultController extends AbstractController
     public function index(): Response
     {
         $books = $this->bookRepo->findBy(["status" => "valid"]);
+
+        usort($books, function($a, $b)
+        {
+            return strcmp($b->getPoints(), $a->getPoints());
+        });
         return $this->render('index.html.twig', [
             "page" => "home",
             "books" => $books

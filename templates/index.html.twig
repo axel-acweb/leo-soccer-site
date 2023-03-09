@@ -101,25 +101,25 @@
               <table class="table custom-table">
                 <thead>
                   <tr>
-                    <th>P</th>
                     <th>Team</th>
                     <th>MJ</th>
                     <th>G</th>
                     <th>N</th>
                     <th>P</th>
+                    <th>+/-</th>
                     <th>PTS</th>
                   </tr>
                 </thead>
                 <tbody>
                 {% for key, book in books %}
                   <tr>
-                    <td>{{ key + 1 }}</td>
                     <td><strong class="text-white">{{book.teamName}}</strong></td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td>{{ book.victories + book.draw + book.defeat }}</td>
+                    <td>{{ book.victories }}</td>
+                    <td>{{ book.draw }}</td>
+                    <td>{{ book.defeat }}</td>
+                    <td>{{book.goalFor != null ? book.goalFor : '0'}}/{{book.scoreAgainst != null ? book.scoreAgainst : '0'}}</td>
+                    <td>{{ book.points }}</td>
                   </tr>
                 {% endfor %}
                 </tbody>
