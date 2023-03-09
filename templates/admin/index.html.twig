@@ -13,8 +13,8 @@
     </div>
 </div>
 <div class="container">
+    <div class="alert alert-danger mt-2">Les poules seront calculées lorsque les 12 équipes seront inscrites</div>
     <div class="row">
-        <div class="alert alert-danger mt-2">Les poules seront calculées lorsque les 12 équipes seront inscrites</div>
         {% for key, group_stage in gsM %}
             <div class="col-md-6 bg-light border p-2">
                 <h2 class="text-center m-3">Poule {{ range('A','Z')[key] }}</h2>
