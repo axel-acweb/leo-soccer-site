@@ -58,7 +58,7 @@
             <nav class="site-navigation position-relative text-right" role="navigation">
               <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
                 <li class="{{page is defined and page == 'home' ? 'active' : ''}}"><a href="{{path('app_default')}}" class="nav-link">Accueil</a></li>
-                <li class="{{page is defined and page == 'book' ? 'active' : ''}}"><a href="{{path('app_join')}}" class="nav-link">{{ app.user is defined and app.user != null ? 'Ma réservation' : "Incrire une équipe / Connexion" }}</a></li>
+                <li class="{{page is defined and page == 'book' ? 'active' : ''}}"><a href="{{path('app_join')}}" class="nav-link">{{ app.user is defined and app.user != null ? 'Ma réservation' : "Inscrire une équipe / Connexion" }}</a></li>
                 {% if results == true %}<li class="{{page is defined and page == 'results' ? 'active' : ''}}"><a href="{{path('app_results')}}" class="nav-link">Résultats</a></li>{% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                   <li class=""><a href="{{path('app_admin')}}" class="nav-link">Administration</a></li> 
