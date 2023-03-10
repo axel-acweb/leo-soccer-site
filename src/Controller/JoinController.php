@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Entity\GroupStageMatch;
 use App\Entity\Player;
 use App\Form\BookType;
 use App\Repository\BookRepository;
@@ -66,8 +67,10 @@ class JoinController extends AbstractController
             "user" => $this->getUser()
         ]);
 
-        if($isBook) {
-            return $this->render("book/already_booked.html.twig", ["book" => $isBook, "status" => Book::STATUS, "page" => "book"]);
+        if($isBook instanceof Book) {
+            $gsM = $this->em->getRepository(GroupStageMatch::class)->findByTeam($isBook);
+            $gs = $gsM instanceOf GroupStageMatch ? $gsM->getGroupStage() : null;
+            return $this->render("book/already_booked.html.twig", ["book" => $isBook, "status" => Book::STATUS, "group_stage" => $gs, "page" => "book"]);
         }
 
         $book = (new Book())->setUser($this->getUser());

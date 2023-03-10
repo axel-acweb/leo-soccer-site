@@ -14,10 +14,16 @@
 </div>
 <div class="container">
     {% if begin != true %}<div class="alert alert-danger mt-2">Les poules seront calculées lorsque les 12 équipes seront inscrites</div>{% endif %}
+    {% if allMatchPlayed == true %}
+        <div class="d-flex justify-content-center align-items-center flex-column mt-3">
+            <div class="alert alert-danger mt-2">Tous les matchs ont étés joués, vous pouvre générer les poules suivantes</div>
+            <a class="btn btn-success" href="{{path('app_admin_next_group')}}">Générer les poules suivantes</a>        
+        </div>
+    {% endif %}
     <div class="row mt-3">
         {% for key, group_stage in gsM %}
             <div class="col-md-6 bg-light border p-2">
-                <h2 class="text-center m-3">Poule {{ range('A','Z')[key] }}</h2>
+                <h2 class="text-center m-3">Poule {{ group_stage.matchs[0].groupStage.name }}</h2>
                 <div class="widget-next-match">
                 <table class="table custom-table">
                     <thead>

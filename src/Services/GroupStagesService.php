@@ -21,6 +21,52 @@ class GroupStagesService {
         "3" => [4]
     ];
 
+    const TEAM_GS = [
+        "first",
+        "second",
+        "third"
+    ];
+
+    const nextGroupStages = [
+        "PRO",
+        "Semi-PRO",
+        "Amateur"
+    ];
+
+    static function canDisplayGroupStages(EntityManagerInterface $em) {
+        $teams = $em->getRepository(Book::class)->findBy(["status" => "valid"]);
+        $gStagesMatch = $em->getRepository(GroupStageMatch::class)->findAll();
+
+        if(count($teams) == 12 && !empty($gStagesMatch)) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    static function isAllMatchPlayed(EntityManagerInterface $em): bool {
+        $gStagesMatch = $em->getRepository(GroupStageMatch::class)->findAll();
+        $gStagesMatchPlayed = $em->getRepository(GroupStageMatch::class)->findBy([
+            "played" => true
+        ]);
+
+        $gStage = $em->getRepository(GroupStage::class)->findOneBy(["id" => 1]);
+
+        if(count($gStagesMatch) == count($gStagesMatchPlayed) && $gStage->getName() != 'PRO') {
+            return true;
+        }
+        
+        return false;
+    }
+
+    public function purgeGroupStages(EntityManagerInterface $em) {
+        $gsM = $em->getRepository(GroupStageMatch::class)->findAll();
+        foreach($gsM as $match) {
+            $em->remove($match);
+        }
+        $em->flush();
+    } 
+
     public function getAllGroupeStagesMatch(EntityManagerInterface $em) {
         $group_stages = $em->getRepository(GroupStage::class)->findAll();
         $ret_state = [];
@@ -64,8 +110,6 @@ class GroupStagesService {
             }
 
 
-            $em->flush();
-
             usort($merge, function($a, $b)
             {
                 if($b->getPoints() == $a->getPoints()) {
@@ -82,6 +126,9 @@ class GroupStagesService {
                     $em->persist($team);
                 }
             }
+
+            $em->flush();
+
 
             $ret_state[] = [
                 "group" => $gs,
@@ -108,6 +155,7 @@ class GroupStagesService {
             $team1->setDraw(0);
             $team1->setDefeat(0);
             $team1->setPoints(0);
+
 
             $team2->setVictories(0);
             $team2->setDraw(0);
@@ -150,6 +198,98 @@ class GroupStagesService {
         $this->generateMatches();
         return $this->ret;
     }   
+
+    public function generateNexGroupStages($teams, $groupStages, EntityManagerInterface $em) {
+
+        $teamsFirst = $em->getRepository(Book::class)->findBy(["position" => 1]);
+        $teamsSecond = $em->getRepository(Book::class)->findBy(["position" => 2]);
+        $teamsThird = $em->getRepository(Book::class)->findBy(["position" => 3]);
+        $last = $em->getRepository(Book::class)->findBy(["position" => 4]);
+
+
+        usort($teamsSecond, function($a, $b)
+        {
+            if($b->getPoints() == $a->getPoints()) {
+                $bAverage = $b->getGoalFor() - $b->getScoreAgainst();
+                $aAverage = $a->getGoalFor() - $a->getScoreAgainst();
+                return ($aAverage > $bAverage) ? -1 : +1;
+            }
+            return strcmp($b->getPoints(), $a->getPoints());
+        });
+
+        usort($teamsThird, function($a, $b)
+        {
+            if($b->getPoints() == $a->getPoints()) {
+                $bAverage = $b->getGoalFor() - $b->getScoreAgainst();
+                $aAverage = $a->getGoalFor() - $a->getScoreAgainst();
+                return ($aAverage > $bAverage) ? -1 : +1;
+            }
+            return strcmp($b->getPoints(), $a->getPoints());
+        });
+
+        $teamsFirst[] = $teamsSecond[0];
+
+        $teamsSecond[] = $teamsThird[0];
+        $teamsSecond[] = $teamsThird[1];
+
+        $teamsThird = [...$teamsThird, ...$last];
+
+        unset($teamsSecond[0]);
+        unset($teamsThird[0]);
+        unset($teamsThird[1]);
+
+
+        $groupStages = $em->getRepository(GroupStage::class)->findAll();
+        $teamsFirst = array_values($teamsFirst);
+        $teamsSecond = array_values($teamsSecond);
+        $teamsThird = array_values($teamsThird);
+
+        $this->purgeGroupStages($em);
+
+        //dd($teamsFirst, $teamsSecond, $teamsThird);
+
+        foreach($groupStages as $key => $gs) {
+            $gs->setName(self::nextGroupStages[$key]);
+            $em->persist($gs);
+            $teams = ${'teams'.ucfirst(self::TEAM_GS[$key])};
+            $this->generateNextGroupMatchs($gs, $teams, $em);
+            $this->setTeamsToZero($teams, $em);
+        }
+
+        $em->flush();
+        //return $this->ret;
+    }  
+
+    public function setTeamsToZero($teams, EntityManagerInterface $em) {
+        foreach($teams as $team) {
+            $team->setScoreAgainst(0);
+            $team->setGoalFor(0);
+            $team->setVictories(0);
+            $team->setDraw(0);
+            $team->setDefeat(0);
+            $team->setPoints(0);
+            $team->setPosition(0);
+
+            $em->persist($team);
+        }
+        $em->flush();
+    }
+
+    public function generateNextGroupMatchs(GroupStage $groupStage, $teams, EntityManagerInterface $em) {
+        $i = 1;
+        foreach(self::MATCHES_LOGIC as $team1 => $matches) {
+            foreach($matches as $team2) {
+                $match = (new GroupStageMatch)
+                    ->setGroupStage($groupStage)
+                    ->setTeam1($teams[$team1 - 1])
+                    ->setTeam2($teams[$team2 - 1]);
+
+                $em->persist($match);
+                $i++;
+            } 
+        }
+
+    }
 
     public function generateMatches() {
         foreach($this->ret as $key => $gs) {

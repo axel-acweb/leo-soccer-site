@@ -15,7 +15,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
-            {% if book.position == null %}
+            {% if group_stage == null %}
                 <div class="d-flex justify-content-center team-vs" style="background:#ee1e46;">
                     <div class="team-2 w-50">
                         <div class="team-details w-100 text-center">
@@ -31,10 +31,11 @@
                 </div>
             {% else %}
                 <div class="d-flex team-vs">
-                    <span class="score">{{book.position}}{{book.position == 1 ? 'er' : 'eme' }}</span>
+                    {% if book.position != 0 %}<span class="score">{{book.position}}{{book.position == 1 ? 'er' : 'eme' }}</span>{% endif %}
                     <div class="team-1 w-50">
                         <div class="team-details w-100 text-center">
                             <img src="images/logo_1.png" alt="Image" class="img-fluid">
+                            <h5 class="font-weight-bold">POULE {{group_stage.name}}</h5>
                             <h3>{{ book.victories }}V-{{ book.draw }}N-{{ book.defeat }}D</span></h3>
                         </div>
                     </div>

@@ -89,7 +89,25 @@ class AdminController extends AbstractController
             'controller_name' => 'AdminController',
             "group_stages" => $gStages,
             "gsM" => $groupStagesMatch,
-            "begin" => $gsValid
+            "begin" => $gsValid,
+            "allMatchPlayed" => GroupStagesService::isAllMatchPlayed($this->em)
         ]);
+    }
+
+    #[Route('/admin/next-group', name: 'app_admin_next_group')]
+    public function generateNexGroupStages(): Response
+    {
+        $service = new GroupStagesService;
+        //$service->purgeGroupStages($this->em);
+
+        $gStages = $this->gsRepo->findAll();
+        $gStagesMatch = $this->gsmRepo->findAll();
+        $teams = $this->bookRepo->findBy(["status" => "valid"]);
+
+        $group_stages = $service->generateNexGroupStages($teams, $gStages, $this->em);
+            
+        $this->em->flush();
+
+        return $this->redirectToRoute("app_admin");
     }
 }
