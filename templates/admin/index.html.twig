@@ -61,12 +61,30 @@
             </div>
             {% for match in group_stage.matchs %}
                 <div class="col-md-6 p-4">
+                    <div class="card text-center bg-dark text-white">
+                        <div class="card-body row">
+                            <div class="col-md-4">
+                                <h5 class="text-light">{{match.team1.teamName}}</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="font-weight-bold">{% if match.team1Score is same as(0) %}0{% endif %}{% if match.team1Score != null %}{{match.team1Score}}{% endif %} : {% if match.team2Score is same as(0) %}0{% endif %}{% if match.team2Score != null %}{{match.team2Score}}{% endif %}</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="text-light">{{match.team2.teamName}}</h5>
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <button href="#" data-toggle="modal" data-target="#exampleModal{{match.id}}" class="btn btn-primary">{{ match.played ? 'Modifier' : 'Ajouter' }} Score</button>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-md-6 p-4">
                     <div class="bg-white row match-display" data-toggle="modal" data-target="#exampleModal{{match.id}}" style="cursor: pointer;">
                         <span class="col-4 text-center">{{match.team1.teamName}}  {% if match.team1Score is same as(0) %}<strong class="font-weight-bold">(0)</strong>{% endif %}{% if match.team1Score != null %}<strong class="font-weight-bold">({{match.team1Score}})</strong>{% endif %}</span>
                         <span class="col-4 text-center font-weight-bold">vs</span>
                         <span class="col-4 text-center">{% if match.team2Score is same as(0) %}<strong class="font-weight-bold">(0)</strong>{% endif %}{% if match.team2Score != null %}<strong class="font-weight-bold">({{match.team2Score}})</strong>{% endif %} {{match.team2.teamName}}</span>
                     </div>
-                </div>
+                </div>-->
 
                 <div class="modal fade" id="exampleModal{{match.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
