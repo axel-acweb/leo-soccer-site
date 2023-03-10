@@ -99,28 +99,16 @@ Les Leos sont les membres les plus jeunes du Lions Clubs International (18-30 an
           <div class="col-lg-6">
             
             <div class="widget-next-match">
-              <table class="table custom-table">
+              <table class="table custom-table text-center text-white">
                 <thead>
                   <tr>
-                    <th>Team</th>
-                    <th>MJ</th>
-                    <th>G</th>
-                    <th>N</th>
-                    <th>P</th>
-                    <th>+/-</th>
-                    <th>PTS</th>
+                    <th>Teams</th>
                   </tr>
                 </thead>
                 <tbody>
                 {% for key, book in books %}
                   <tr>
                     <td><strong class="text-white">{{book.teamName}}</strong></td>
-                    <td>{{ book.victories + book.draw + book.defeat }}</td>
-                    <td>{{ book.victories }}</td>
-                    <td>{{ book.draw }}</td>
-                    <td>{{ book.defeat }}</td>
-                    <td>{{book.goalFor != null ? book.goalFor : '0'}}/{{book.scoreAgainst != null ? book.scoreAgainst : '0'}}</td>
-                    <td>{{ book.points }}</td>
                   </tr>
                 {% endfor %}
                 </tbody>
