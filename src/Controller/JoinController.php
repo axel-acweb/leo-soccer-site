@@ -73,25 +73,29 @@ class JoinController extends AbstractController
             return $this->render("book/already_booked.html.twig", ["book" => $isBook, "status" => Book::STATUS, "group_stage" => $gs, "page" => "book"]);
         }
 
-        $book = (new Book())->setUser($this->getUser());
-        $i = 1;
-        while($i <= 4) {
-            $i++;
-            $player = new Player();
-            $book->addPlayer($player);
-        }
-        $this->em->persist($book);
-        $form = $this->createForm(BookType::class, $book);
-        $form->handleRequest($request);
+        $books = $this->bookRepo->findAll();
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if(count($books) != 12) {
+            $book = (new Book())->setUser($this->getUser());
+            $i = 1;
+            while($i <= 4) {
+                $i++;
+                $player = new Player();
+                $book->addPlayer($player);
+            }
             $this->em->persist($book);
-            $this->em->flush();
-            return $this->redirectToRoute('app_join');
+            $form = $this->createForm(BookType::class, $book);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->em->persist($book);
+                $this->em->flush();
+                return $this->redirectToRoute('app_join');
+            }
         }
 
         return $this->render('book/index.html.twig', [
-            'form' => $form->createView()
+            'form' => isset($form) ? $form->createView() : null
         ]);
     }
 }
