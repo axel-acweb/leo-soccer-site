@@ -32,11 +32,13 @@ class JoinController extends AbstractController
         if(isset($request_body['orderID'])) {
             $orderId = $request_body['orderID'];
             //$ch = curl_init();
-            $clientId = "AZmihrs6ngq1-8Bfd6lu8dCCV6Qte2zLPXUxlfSnvTH5DaSQ3uZPPYQl6YidsBVNpXGqKL5lYyg4MOxM";
-            $secret = "EAOrjYlQKRRGiqGx2q3OlBmOLngLDoW8vMUtT7QZYL-kpKp50IlgoFQfXQ3oTKivi78IM9IINVt3jhhx";
+            //$clientId = "AZmihrs6ngq1-8Bfd6lu8dCCV6Qte2zLPXUxlfSnvTH5DaSQ3uZPPYQl6YidsBVNpXGqKL5lYyg4MOxM";
+            $clientId = "AQKnBBq8auvkFIQD8vttK8d0z6xlauWVSf4QZO9ZMwJT9hKozSPAvO7iSTEnIx0ZMRjfdRUa1juO-1Cq";
+            //$secret = "EAOrjYlQKRRGiqGx2q3OlBmOLngLDoW8vMUtT7QZYL-kpKp50IlgoFQfXQ3oTKivi78IM9IINVt3jhhx";
+            $secret = "AQKnBBq8auvkFIQD8vttK8d0z6xlauWVSf4QZO9ZMwJT9hKozSPAvO7iSTEnIx0ZMRjfdRUa1juO-1Cq";
             //dd("https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId");
             //curl_setopt($ch, CURLOPT_URL, "https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId");
-            $response = $this->client->request('GET', "https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId", [
+            $response = $this->client->request('GET', "https://api-m.paypal.com/v2/checkout/orders/$orderId", [
                 'auth_basic' => [$clientId, $secret],
             ]);
 
