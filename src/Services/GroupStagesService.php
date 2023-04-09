@@ -51,9 +51,10 @@ class GroupStagesService {
         ]);
 
         $gStage = $em->getRepository(GroupStage::class)->findOneBy(["id" => 1]);
-
-        if(count($gStagesMatch) == count($gStagesMatchPlayed) && $gStage->getName() != 'PRO') {
-            return true;
+        if($gStage) {
+            if(count($gStagesMatch) == count($gStagesMatchPlayed) && $gStage->getName() != 'PRO') {
+                return true;
+            }
         }
         
         return false;
