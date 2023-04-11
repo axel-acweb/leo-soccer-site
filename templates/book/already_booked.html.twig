@@ -77,20 +77,21 @@
             <p>Un paiement de 25€ est nécessaire pour valider votre réservation</p>
             <div class="d-flex justify-content-center mt-4">
                 <!-- Replace "test" with your own sandbox Business account app client ID -->
-                <script src="https://www.paypal.com/sdk/js?client-id=AZdgiKT-xu2poZL03xNGq6p7dSCZdG5WkSSAH3X_5v-CqLwyclOZXPRBzGTUl608IS5M_Kd3LXd3l3mf&currency=EUR"></script>
+                <script src="https://www.paypal.com/sdk/js?client-id=AZdgiKT-xu2poZL03xNGq6p7dSCZdG5WkSSAH3X_5v-CqLwyclOZXPRBzGTUl608IS5M_Kd3LXd3l3mf&currency=EUR&enable-funding=card"></script>
                 <!-- Set up a container element for the button -->
                 <div id="paypal-button-container"></div>
                 <script>
                 paypal.Buttons({
                     // Order is created on the server and the order id is returned
                     createOrder(data, actions) {
-                        return actions.order.create({
-                            purchase_units: [{
-                                amount: {
-                                    value: '25'
-                                }
-                            }]
+                        return fetch("/payment/create", {
+                            method: "GET",
+                            headers: {
+                                "Content-Type": "application/json",
+                            }
                         })
+                        .then((response) => response.json())
+                        .then((order) => order.id);
                     },
                     // Finalize the transaction on the server after payer approval
                     onApprove(data) {

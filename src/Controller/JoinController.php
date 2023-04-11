@@ -38,6 +38,9 @@ class JoinController extends AbstractController
             $secret = "EDNAs2HtyLmoDCbX7ZJWq2PcnC43f66lSTQCVsJDDT4hIpRHOqGMIMxp2Ee5SRlCPFBz_WjFRvobqAUT";
             //dd("https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId");
             //curl_setopt($ch, CURLOPT_URL, "https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId");
+
+
+
             $response = $this->client->request('GET', "https://api-m.paypal.com/v2/checkout/orders/$orderId", [
                 'auth_basic' => [$clientId, $secret],
             ]);
@@ -47,6 +50,13 @@ class JoinController extends AbstractController
             $book = $this->bookRepo->findOneBy(["id" => $id]);
             //dd($content);
             if($book instanceof Book && isset($content['status']) && $content['status'] == "APPROVED") {
+                $capture = $this->client->request('POST', "https://api-m.paypal.com/v2/checkout/orders/$orderId/capture", [
+                    'auth_basic' => [$clientId, $secret],
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                    ],
+                ]);
+                
                 $book->setStatus('valid');
                 $this->em->persist($book);
                 $this->em->flush();
@@ -55,6 +65,47 @@ class JoinController extends AbstractController
             }
         }
         return new JsonResponse('nok', 404);
+    }
+
+    #[Route('/payment/create', name: 'app_payment_create', methods: ['GET'])]
+    public function createPayment(Request $request): JsonResponse
+    {
+        $request_body = json_decode($request->getContent(), true);;
+            //$ch = curl_init();
+            //$clientId = "AZmihrs6ngq1-8Bfd6lu8dCCV6Qte2zLPXUxlfSnvTH5DaSQ3uZPPYQl6YidsBVNpXGqKL5lYyg4MOxM";
+            $clientId = "AZdgiKT-xu2poZL03xNGq6p7dSCZdG5WkSSAH3X_5v-CqLwyclOZXPRBzGTUl608IS5M_Kd3LXd3l3mf";
+            //$secret = "EAOrjYlQKRRGiqGx2q3OlBmOLngLDoW8vMUtT7QZYL-kpKp50IlgoFQfXQ3oTKivi78IM9IINVt3jhhx";
+            $secret = "EDNAs2HtyLmoDCbX7ZJWq2PcnC43f66lSTQCVsJDDT4hIpRHOqGMIMxp2Ee5SRlCPFBz_WjFRvobqAUT";
+            //dd("https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId");
+            //curl_setopt($ch, CURLOPT_URL, "https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId");
+
+            $fields_string = '{
+                "intent":"CAPTURE",
+                "purchase_units": [
+                    {
+                        "amount": {
+                            "value": 25,
+                            "currency_code": "EUR"
+                        }
+                    }
+                ]
+            }';
+
+            //return new JsonResponse($fields_string, 200);
+
+
+
+            $response = $this->client->request('POST', "https://api-m.paypal.com/v2/checkout/orders", [
+                'auth_basic' => [$clientId, $secret],
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+                "body" => $fields_string
+            ]);
+
+            $content = $response->toArray();
+
+            return new JsonResponse($content, 200);
     }
 
     #[Route('/reserver', name: 'app_join')]
