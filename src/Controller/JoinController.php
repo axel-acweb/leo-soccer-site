@@ -33,9 +33,9 @@ class JoinController extends AbstractController
             $orderId = $request_body['orderID'];
             //$ch = curl_init();
             //$clientId = "AZmihrs6ngq1-8Bfd6lu8dCCV6Qte2zLPXUxlfSnvTH5DaSQ3uZPPYQl6YidsBVNpXGqKL5lYyg4MOxM";
-            $clientId = "AZdgiKT-xu2poZL03xNGq6p7dSCZdG5WkSSAH3X_5v-CqLwyclOZXPRBzGTUl608IS5M_Kd3LXd3l3mf";
+            $clientId = "AXOOIzDODFWqBVm-pquy-GL7tl645PpAKgMCVP9KxBweOzmftZqjx0BFK-6G8-aqHM4ov-NyHNcrJM-n";
             //$secret = "EAOrjYlQKRRGiqGx2q3OlBmOLngLDoW8vMUtT7QZYL-kpKp50IlgoFQfXQ3oTKivi78IM9IINVt3jhhx";
-            $secret = "EDNAs2HtyLmoDCbX7ZJWq2PcnC43f66lSTQCVsJDDT4hIpRHOqGMIMxp2Ee5SRlCPFBz_WjFRvobqAUT";
+            $secret = "EFOmVjFVKftcOlPNLqaSRGciH8azj7B46CPoCWSHcwCdoCZc-FbBw1Pec0VrIfeChC41_10BoFpPGi5X";
             //dd("https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId");
             //curl_setopt($ch, CURLOPT_URL, "https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId");
 
@@ -73,9 +73,9 @@ class JoinController extends AbstractController
         $request_body = json_decode($request->getContent(), true);;
             //$ch = curl_init();
             //$clientId = "AZmihrs6ngq1-8Bfd6lu8dCCV6Qte2zLPXUxlfSnvTH5DaSQ3uZPPYQl6YidsBVNpXGqKL5lYyg4MOxM";
-            $clientId = "AZdgiKT-xu2poZL03xNGq6p7dSCZdG5WkSSAH3X_5v-CqLwyclOZXPRBzGTUl608IS5M_Kd3LXd3l3mf";
+            $clientId = "AXOOIzDODFWqBVm-pquy-GL7tl645PpAKgMCVP9KxBweOzmftZqjx0BFK-6G8-aqHM4ov-NyHNcrJM-n";
             //$secret = "EAOrjYlQKRRGiqGx2q3OlBmOLngLDoW8vMUtT7QZYL-kpKp50IlgoFQfXQ3oTKivi78IM9IINVt3jhhx";
-            $secret = "EDNAs2HtyLmoDCbX7ZJWq2PcnC43f66lSTQCVsJDDT4hIpRHOqGMIMxp2Ee5SRlCPFBz_WjFRvobqAUT";
+            $secret = "EFOmVjFVKftcOlPNLqaSRGciH8azj7B46CPoCWSHcwCdoCZc-FbBw1Pec0VrIfeChC41_10BoFpPGi5X";
             //dd("https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId");
             //curl_setopt($ch, CURLOPT_URL, "https://api-m.sandbox.paypal.com/v2/checkout/orders/$orderId");
 
