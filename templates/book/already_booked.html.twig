@@ -72,12 +72,12 @@
 </div>
     <div class="row mt-4 mb-4">
         {% if book.status == 'payment_process' %}
-        <div class="col-md-12 mb-4 bg-light round d-flex justify-content-center flex-column align-items-center p-4">
-            <h2 class="text-xl text-center text-white">Paiement en attente</h2>
+        <div class="col-md-12 mb-4 bg-white round d-flex justify-content-center flex-column align-items-center p-4">
+            <h2 class="text-xl text-center text-black">Paiement en attente</h2>
             <p>Un paiement de 25€ est nécessaire pour valider votre réservation</p>
             <div class="d-flex justify-content-center mt-4">
                 <!-- Replace "test" with your own sandbox Business account app client ID -->
-                <script src="https://www.paypal.com/sdk/js?client-id=AXOOIzDODFWqBVm-pquy-GL7tl645PpAKgMCVP9KxBweOzmftZqjx0BFK-6G8-aqHM4ov-NyHNcrJM-n&currency=EUR&enable-funding=card"></script>
+                <script src="https://www.paypal.com/sdk/js?client-id=AZdgiKT-xu2poZL03xNGq6p7dSCZdG5WkSSAH3X_5v-CqLwyclOZXPRBzGTUl608IS5M_Kd3LXd3l3mf&currency=EUR"></script>
                 <!-- Set up a container element for the button -->
                 <div id="paypal-button-container"></div>
                 <script>
